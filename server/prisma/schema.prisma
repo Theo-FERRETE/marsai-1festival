@@ -1,15 +1,108 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(JURY)
+  createdAt DateTime @default(now())
+
+  votes     Vote[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  JURY
+}
+
+model Submitter {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  firstName String?
+  lastName  String?
+
+  films     Film[]
+
+  @@map("submitters")
+}
+
+model Film {
+  id              Int        @id @default(autoincrement())
+  submitterId     Int
+  submissionToken String     @unique @default(uuid())
+
+  title           String
+  description     String     @db.Text
+  country         String
+  youtubeUrl      String
+  aiToolsUsed     String     @db.Text
+
+  status          FilmStatus @default(PENDING)
+
+  averageRating   Float?
+  totalVotes      Int        @default(0)
+
+  submittedAt     DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  submitter       Submitter  @relation(fields: [submitterId], references: [id])
+  votes           Vote[]
+
+  @@index([status])
+  @@index([country])
+  @@index([averageRating])
+
+  @@map("films")
+}
+
+enum FilmStatus {
+  PENDING
+  APPROVED
+  FINALIST
+  REJECTED
+  TO_MODIFY
+}
+
+model Vote {
+  id        Int          @id @default(autoincrement())
+  filmId    Int
+  userId    Int
+
+  decision  VoteDecision
+  rating    Int?
+  comment   String       @db.Text
+
+  votedAt   DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  film      Film         @relation(fields: [filmId], references: [id], onDelete: Cascade)
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([filmId, userId])
+
+  @@map("votes")
+}
+
+enum VoteDecision {
+  APPROVE
+  REJECT
+  TO_MODIFY
+}
+
+model NewsletterSubscriber {
+  id               Int      @id @default(autoincrement())
+  email            String   @unique
+  unsubscribeToken String   @unique @default(uuid())
+  subscribedAt     DateTime @default(now())
+
+  @@map("newsletter_subscribers")
 }
