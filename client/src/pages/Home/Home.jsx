@@ -52,11 +52,11 @@ function Home() {
         <div className="rounded-lg overflow-hidden shadow-lg">
           <iframe
             title="Plan du lieu"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.999688644956!2d2.293408315674897!3d48.87084597928846!"
+            src="https://www.google.com/maps?q=Palais%20des%20Congres%20Paris&output=embed"
             width="100%"
             height="300"
             style={{ border: 0 }}
-            allowFullScreen=""
+            allowFullScreen
             loading="lazy"
           ></iframe>
         </div>
