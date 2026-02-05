@@ -6,6 +6,7 @@ import Recompenses from "../components/Home/Recompenses";
 import Agenda from "../components/Home/Agenda";
 import Partenaires from "../components/Home/Partenaires";
 import CTA from "../components/Home/CTA";
+import LoginAdmin from "./LoginAdmin";
 
 function Home() {
   return (
@@ -22,7 +23,9 @@ function Home() {
       <CTA />
       <Agenda />
       <Partenaires />
+      <LoginAdmin />
     </>
+
   );
 }
 
