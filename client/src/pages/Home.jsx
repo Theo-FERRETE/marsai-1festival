@@ -1,11 +1,11 @@
-import Description from "../components/Description";
-import Jury from "../components/Jury";
-import Lieu from "../components/Lieu";
-import Rules from "../components/Rules";
-import Recompenses from "../components/Recompenses";
-import Agenda from "../components/Agenda";
-import Partenaires from "../components/Partenaires";
-import CTA from "../components/CTA";
+import Description from "../components/Home/Description";
+import Jury from "../components/Home/Jury";
+import Lieu from "../components/Home/Lieu";
+import Rules from "../components/Home/Rules";
+import Recompenses from "../components/Home/Recompenses";
+import Agenda from "../components/Home/Agenda";
+import Partenaires from "../components/Home/Partenaires";
+import CTA from "../components/Home/CTA";
 
 function Home() {
   return (
