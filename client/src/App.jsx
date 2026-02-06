@@ -1,19 +1,47 @@
-import './App.css'
-import LoginAdmin from './pages/LoginAdmin.jsx'
-import { useState } from "react"
-import Header from './Layout/Header.jsx'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Home from "./pages/Home/Home.jsx";
-import SubmissionPage from "./pages/Submission/SubmissionPage.jsx"; // 1. On importe la nouvelle page
+// 1. Imports Pages Publiques
+import Home from './pages/Home.jsx';
+import SubmissionPage from './pages/Submission/SubmissionPage.jsx';
+import LoginAdmin from './pages/LoginAdmin.jsx'; 
+
+// 2. Imports Layouts
+import AdminLayout from './Layout/AdminLayout.jsx';
+import PublicLayout from './Layout/PublicLayout.jsx';
+
+// 3. Imports Pages Admin
+import FilmsList from './pages/Admin/FilmsList.jsx';
+import DashboardHome from './pages/Admin/DashboardHome.jsx';
 
 function App() {
   return (
-    <>
-    <Header />
-    <Home /> 
-    <SubmissionPage />
-    </>
+    <BrowserRouter>
+      <Routes>
+        
+        {/* --- ZONE PUBLIQUE --- */}
+        <Route element={<PublicLayout />}>
+           <Route path="/" element={<Home />} />
+           <Route path="/soumettre" element={<SubmissionPage />} />
+           <Route path="/login" element={<LoginAdmin />} />
+        </Route>
+
+        {/* --- ZONE ADMIN --- */}
+        <Route path="/admin" element={<AdminLayout />}>
+          
+          {/* Vue d'ensemble (Stats) */}
+          <Route index element={<DashboardHome />} />
+          
+          {/* Liste des films */}
+          <Route path="films" element={<FilmsList />} />
+          
+          <Route path="users" element={<div className="text-white">Gestion Jury (À venir)</div>} />
+          <Route path="awards" element={<div className="text-white">Palmarès (À venir)</div>} />
+        </Route>
+
+      </Routes>
+    </BrowserRouter>
   );
 }
+
 
 export default App;
