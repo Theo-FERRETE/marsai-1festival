@@ -1,68 +1,87 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+// Login admin form
 
-function LoginAdmin() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+export default function LoginAdmin() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log("Connexion...", email);
-    // Simulation de redirection vers le dashboard
-    navigate('/admin');
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
+
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_URL;
+      if (!apiBaseUrl) {
+        throw new Error("VITE_API_URL manquant dans le .env");
+      }
+
+      const response = await fetch(`${apiBaseUrl}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.error || data?.message || "Connexion impossible.");
+      }
+
+      localStorage.setItem("marsai_token", data.token);
+      localStorage.setItem("marsai_user", JSON.stringify(data.user));
+      setSuccess("Connexion réussie.");
+      setPassword("");
+    } catch (err) {
+      setError(err.message || "Connexion impossible.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white px-4">
-      
-      <div className="max-w-md w-full bg-[#262626] p-8 rounded-lg shadow-2xl border border-white/10">
-        
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold tracking-widest uppercase mb-2">
-            Admin <span className="text-indigo-500">Panel</span>
-          </h1>
-          <p className="text-white/40 text-sm">Accès réservé</p>
-        </div>
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-6 py-12">
+      <form
+        className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 space-y-4"
+        onSubmit={handleSubmit}
+      >
+        <h2 className="text-2xl font-semibold text-slate-900">Connexion Admin</h2>
 
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wide text-white/60 mb-2">
-              Email
-            </label>
-            <input 
-              type="email" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-              placeholder="admin@festival.com"
-            />
-          </div>
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/20"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          autoComplete="email"
+          required
+        />
 
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wide text-white/60 mb-2">
-              Mot de passe
-            </label>
-            <input 
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-              placeholder="••••••••"
-            />
-          </div>
+        <input
+          type="password"
+          placeholder="Mot de passe"
+          className="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/20"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          autoComplete="current-password"
+          required
+        />
 
-          <button 
-            type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded uppercase tracking-widest text-sm"
-          >
-            Se connecter
-          </button>
-        </form>
+        {error && <p className="text-sm text-red-600">{error}</p>}
+        {success && <p className="text-sm text-emerald-600">{success}</p>}
 
-      </div>
+        <button
+          type="submit"
+          className="w-full rounded-lg bg-slate-900 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-60"
+          disabled={loading}
+        >
+          {loading ? "Connexion..." : "Se connecter"}
+        </button>
+      </form>
     </div>
   );
 }
-
-export default LoginAdmin;
