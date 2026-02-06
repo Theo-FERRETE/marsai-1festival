@@ -1,3 +1,6 @@
+import './App.css'
+import Home from './pages/Home.jsx'
+import LoginAdmin from './pages/LoginAdmin.jsx'
 import { useState } from "react";
 // import './App.css' // ⚠️ Je te conseille de commenter cette ligne pour l'instant.
 // Pourquoi ? App.css contient souvent des styles par défaut de Vite (centrage, padding)
