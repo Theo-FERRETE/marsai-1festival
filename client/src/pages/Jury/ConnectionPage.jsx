@@ -1,8 +1,8 @@
 import React from 'react';
 
-const ConnexionPageJury = () => {
+const ConnectionPageJury = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-screen bg-indigo-50 flex items-center justify-center">
       <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
         <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">Connexion Jury</h1>
         <form className="space-y-4">
@@ -23,6 +23,9 @@ const ConnexionPageJury = () => {
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               placeholder="Votre Mot de passe"
             />
+            <div className="text-right mt-2">
+              <a href="#" className="text-sm text-indigo-600 hover:underline">Mot de passe oublié ?</a>
+            </div>
           </div>
           <button
             type="submit"
@@ -33,7 +36,7 @@ const ConnexionPageJury = () => {
         </form>
         <div className="mt-6">
           <button
-            className="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center justify-center"
+            className="w-full bg-white text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 flex items-center justify-center"
           >
             <svg
               className="w-5 h-5 mr-2"
@@ -66,4 +69,4 @@ const ConnexionPageJury = () => {
   );
 };
 
-export default ConnexionPageJury;
+export default ConnectionPageJury;
