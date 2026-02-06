@@ -1,18 +1,47 @@
-import { useState } from 'react'
-// import './App.css' // ⚠️ Je te conseille de commenter cette ligne pour l'instant. 
-// Pourquoi ? App.css contient souvent des styles par défaut de Vite (centrage, padding) 
-// qui peuvent casser notre mise en page "Plein écran" avec Tailwind.
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Home from './pages/Home.jsx'
-import SubmissionPage from './pages/Submission/SubmissionPage.jsx' // 1. On importe la nouvelle page
+// 1. Imports Pages Publiques
+import Home from './pages/Home.jsx';
+import SubmissionPage from './pages/Submission/SubmissionPage.jsx';
+import LoginAdmin from './pages/LoginAdmin.jsx'; 
+
+// 2. Imports Layouts
+import AdminLayout from './Layout/AdminLayout.jsx';
+import PublicLayout from './Layout/PublicLayout.jsx';
+
+// 3. Imports Pages Admin
+import FilmsList from './pages/Admin/FilmsList.jsx';
+import DashboardHome from './pages/Admin/DashboardHome.jsx';
 
 function App() {
-
   return (
-    // <Home />  <-- 2. On met un commentaire pour masquer l'accueil temporairement
-    <SubmissionPage /> // <-- 3. On affiche la page de soumission
-  )
+    <BrowserRouter>
+      <Routes>
+        
+        {/* --- ZONE PUBLIQUE --- */}
+        <Route element={<PublicLayout />}>
+           <Route path="/" element={<Home />} />
+           <Route path="/soumettre" element={<SubmissionPage />} />
+           <Route path="/login" element={<LoginAdmin />} />
+        </Route>
 
+        {/* --- ZONE ADMIN --- */}
+        <Route path="/admin" element={<AdminLayout />}>
+          
+          {/* Vue d'ensemble (Stats) */}
+          <Route index element={<DashboardHome />} />
+          
+          {/* Liste des films */}
+          <Route path="films" element={<FilmsList />} />
+          
+          <Route path="users" element={<div className="text-white">Gestion Jury (À venir)</div>} />
+          <Route path="awards" element={<div className="text-white">Palmarès (À venir)</div>} />
+        </Route>
+
+      </Routes>
+    </BrowserRouter>
+  );
 }
+
 
 export default App;
